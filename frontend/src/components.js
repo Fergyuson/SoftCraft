@@ -475,6 +475,373 @@ export const Footer = () => {
   );
 };
 
-import { useState } from "react";
-import { Link } from "react-router-dom";
-import { useCart } from "./CartContext";
+// Mock products data (20 items)
+const products = [
+  // Web Development (5 items)
+  { id: 1, name: "React Pro Toolkit", price: 4999, category: "web", image: "https://images.unsplash.com/photo-1648737966636-2fc3a5fffc8a?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2NzB8MXwxfHNlYXJjaHwxfHx0ZWNobm9sb2d5fGVufDB8fHxibHVlfDE3NTQwMTk2NTV8MA&ixlib=rb-4.1.0&q=85", description: "Профессиональный набор инструментов для React разработки" },
+  { id: 2, name: "Node.js Server Kit", price: 3999, category: "web", image: "https://images.unsplash.com/photo-1488590528505-98d2b5aba04b?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2NzB8MHwxfHNlYXJjaHwyfHx0ZWNobm9sb2d5fGVufDB8fHxibHVlfDE3NTQwMTk2NTV8MA&ixlib=rb-4.1.0&q=85", description: "Мощное серверное решение на Node.js" },
+  { id: 3, name: "Vue.js Masterclass", price: 2999, category: "web", image: "https://images.unsplash.com/photo-1607799279861-4dd421887fb3?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2NzV8MHwxfHNlYXJjaHwxfHxwcm9ncmFtbWluZ3xlbnwwfHx8Ymx1ZXwxNzU0MDM4MDg3fDA&ixlib=rb-4.1.0&q=85", description: "Комплексный курс по Vue.js разработке" },
+  { id: 4, name: "Full-Stack Bundle", price: 8999, category: "web", image: "https://images.unsplash.com/photo-1545229920-f669c6872fa9?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2NzV8MHwxfHNlYXJjaHw0fHxwcm9ncmFtbWluZ3xlbnwwfHx8Ymx1ZXwxNzU0MDM4MDg3fDA&ixlib=rb-4.1.0&q=85", description: "Полный стек для веб-разработки" },
+  { id: 5, name: "JavaScript Advanced", price: 1999, category: "web", image: "https://images.pexels.com/photos/16053029/pexels-photo-16053029.jpeg", description: "Продвинутые техники JavaScript" },
+  
+  // Mobile Development (5 items)
+  { id: 6, name: "React Native Kit", price: 5999, category: "mobile", image: "https://images.unsplash.com/photo-1581090464777-f3220bbe1b8b?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2NzB8MHwxfHNlYXJjaHwzfHx0ZWNobm9sb2d5fGVufDB8fHxibHVlfDE3NTQwMTk2NTV8MA&ixlib=rb-4.1.0&q=85", description: "Набор для разработки мобильных приложений" },
+  { id: 7, name: "Flutter Pro Tools", price: 6999, category: "mobile", image: "https://images.unsplash.com/photo-1597733336794-12d05021d510?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2NzB8MHwxfHNlYXJjaHw0fHx0ZWNobm9sb2d5fGVufDB8fHxibHVlfDE3NTQwMTk2NTV8MA&ixlib=rb-4.1.0&q=85", description: "Профессиональные инструменты Flutter" },
+  { id: 8, name: "iOS Development Suite", price: 7999, category: "mobile", image: "https://images.pexels.com/photos/8728559/pexels-photo-8728559.jpeg", description: "Комплект для iOS разработки" },
+  { id: 9, name: "Android Studio Pro", price: 4999, category: "mobile", image: "https://images.pexels.com/photos/7789851/pexels-photo-7789851.jpeg", description: "Расширенная версия Android Studio" },
+  { id: 10, name: "Mobile Testing Kit", price: 3999, category: "mobile", image: "https://images.pexels.com/photos/5475750/pexels-photo-5475750.jpeg", description: "Инструменты для тестирования мобильных приложений" },
+  
+  // Design (5 items)
+  { id: 11, name: "Figma Pro License", price: 2999, category: "design", image: "https://images.unsplash.com/photo-1608512532288-8f985c15345d?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2NzV8MHwxfHNlYXJjaHwzfHxwcm9ncmFtbWluZ3xlbnwwfHx8Ymx1ZXwxNzU0MDM4MDg3fDA&ixlib=rb-4.1.0&q=85", description: "Профессиональная лицензия Figma" },
+  { id: 12, name: "Adobe Creative Suite", price: 9999, category: "design", image: "https://images.unsplash.com/photo-1648737966636-2fc3a5fffc8a?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2NzB8MXwxfHNlYXJjaHwxfHx0ZWNobm9sb2d5fGVufDB8fHxibHVlfDE3NTQwMTk2NTV8MA&ixlib=rb-4.1.0&q=85", description: "Полный пакет Adobe для дизайнеров" },
+  { id: 13, name: "Sketch Premium", price: 3999, category: "design", image: "https://images.unsplash.com/photo-1488590528505-98d2b5aba04b?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2NzB8MHwxfHNlYXJjaHwyfHx0ZWNobm9sb2d5fGVufDB8fHxibHVlfDE3NTQwMTk2NTV8MA&ixlib=rb-4.1.0&q=85", description: "Премиум версия Sketch" },
+  { id: 14, name: "UI Kit Collection", price: 1999, category: "design", image: "https://images.unsplash.com/photo-1581090464777-f3220bbe1b8b?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2NzB8MHwxfHNlYXJjaHwzfHx0ZWNobm9sb2d5fGVufDB8fHxibHVlfDE3NTQwMTk2NTV8MA&ixlib=rb-4.1.0&q=85", description: "Коллекция UI компонентов" },
+  { id: 15, name: "Design System Pro", price: 5999, category: "design", image: "https://images.unsplash.com/photo-1597733336794-12d05021d510?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2NzB8MHwxfHNlYXJjaHw0fHx0ZWNobm9sb2d5fGVufDB8fHxibHVlfDE3NTQwMTk2NTV8MA&ixlib=rb-4.1.0&q=85", description: "Профессиональная дизайн-система" },
+  
+  // Cloud Solutions (5 items)
+  { id: 16, name: "AWS Deployment Kit", price: 6999, category: "cloud", image: "https://images.pexels.com/photos/8728559/pexels-photo-8728559.jpeg", description: "Набор для развертывания в AWS" },
+  { id: 17, name: "Docker Pro Suite", price: 4999, category: "cloud", image: "https://images.pexels.com/photos/7789851/pexels-photo-7789851.jpeg", description: "Профессиональные Docker инструменты" },
+  { id: 18, name: "Kubernetes Manager", price: 8999, category: "cloud", image: "https://images.unsplash.com/photo-1607799279861-4dd421887fb3?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2NzV8MHwxfHNlYXJjaHwxfHxwcm9ncmFtbWluZ3xlbnwwfHx8Ymx1ZXwxNzU0MDM4MDg3fDA&ixlib=rb-4.1.0&q=85", description: "Менеджер Kubernetes кластеров" },
+  { id: 19, name: "CI/CD Pipeline", price: 7999, category: "cloud", image: "https://images.unsplash.com/photo-1608512532288-8f985c15345d?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2NzV8MHwxfHNlYXJjaHwzfHxwcm9ncmFtbWluZ3xlbnwwfHx8Ymx1ZXwxNzU0MDM4MDg3fDA&ixlib=rb-4.1.0&q=85", description: "Автоматизация CI/CD процессов" },
+  { id: 20, name: "Cloud Monitoring", price: 3999, category: "cloud", image: "https://images.unsplash.com/photo-1545229920-f669c6872fa9?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2NzV8MHwxfHNlYXJjaHw0fHxwcm9ncmFtbWluZ3xlbnwwfHx8Ymx1ZXwxNzU0MDM4MDg3fDA&ixlib=rb-4.1.0&q=85", description: "Система мониторинга облачных сервисов" }
+];
+
+// Catalog Component
+export const Catalog = () => {
+  const [filteredProducts, setFilteredProducts] = useState(products);
+  const [selectedCategory, setSelectedCategory] = useState('all');
+  const [searchTerm, setSearchTerm] = useState('');
+  const { addToCart } = useCart();
+  
+  useEffect(() => {
+    // Get category from URL params
+    const urlParams = new URLSearchParams(window.location.search);
+    const categoryParam = urlParams.get('category');
+    if (categoryParam && categoryParam !== 'all') {
+      setSelectedCategory(categoryParam);
+    }
+  }, []);
+
+  useEffect(() => {
+    let filtered = products;
+    
+    if (selectedCategory !== 'all') {
+      filtered = filtered.filter(product => product.category === selectedCategory);
+    }
+    
+    if (searchTerm) {
+      filtered = filtered.filter(product => 
+        product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        product.description.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+    }
+    
+    setFilteredProducts(filtered);
+  }, [selectedCategory, searchTerm]);
+
+  const categories = [
+    { id: 'all', name: 'Все товары', icon: '🛍️' },
+    { id: 'web', name: 'Веб-разработка', icon: '🌐' },
+    { id: 'mobile', name: 'Мобильные приложения', icon: '📱' },
+    { id: 'design', name: 'UI/UX Дизайн', icon: '🎨' },
+    { id: 'cloud', name: 'Облачные решения', icon: '☁️' }
+  ];
+
+  return (
+    <div className="min-h-screen bg-gray-50 pt-20">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="mb-8">
+          <h1 className="text-4xl font-bold text-gray-900 mb-4">Каталог товаров</h1>
+          <p className="text-xl text-gray-600">Профессиональные инструменты для разработчиков</p>
+        </div>
+
+        {/* Search and Filters */}
+        <div className="bg-white rounded-lg shadow-md p-6 mb-8">
+          <div className="flex flex-col lg:flex-row gap-4">
+            <div className="flex-1">
+              <input
+                type="text"
+                placeholder="Поиск товаров..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"
+              />
+            </div>
+            <div className="flex flex-wrap gap-2">
+              {categories.map(category => (
+                <button
+                  key={category.id}
+                  onClick={() => setSelectedCategory(category.id)}
+                  className={`px-4 py-2 rounded-lg flex items-center space-x-2 transition-colors ${
+                    selectedCategory === category.id
+                      ? 'bg-blue-600 text-white'
+                      : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                  }`}
+                >
+                  <span>{category.icon}</span>
+                  <span>{category.name}</span>
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {/* Products Grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          {filteredProducts.map(product => (
+            <div key={product.id} className="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow overflow-hidden">
+              <div className="h-48 overflow-hidden">
+                <img
+                  src={product.image}
+                  alt={product.name}
+                  className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
+                />
+              </div>
+              <div className="p-4">
+                <h3 className="text-lg font-semibold text-gray-900 mb-2">{product.name}</h3>
+                <p className="text-gray-600 text-sm mb-4">{product.description}</p>
+                <div className="flex items-center justify-between">
+                  <span className="text-2xl font-bold text-blue-600">{product.price.toLocaleString()} ₽</span>
+                  <button
+                    onClick={() => addToCart(product)}
+                    className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-colors"
+                  >
+                    В корзину
+                  </button>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {filteredProducts.length === 0 && (
+          <div className="text-center py-12">
+            <div className="text-6xl mb-4">😔</div>
+            <h3 className="text-xl font-semibold text-gray-900 mb-2">Товары не найдены</h3>
+            <p className="text-gray-600">Попробуйте изменить фильтры или поисковый запрос</p>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};
+
+// Cart Component
+export const Cart = () => {
+  const { items, updateQuantity, removeFromCart, getTotalPrice, clearCart } = useCart();
+
+  if (items.length === 0) {
+    return (
+      <div className="min-h-screen bg-gray-50 pt-20">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          <div className="text-center py-12">
+            <div className="text-6xl mb-4">🛒</div>
+            <h2 className="text-2xl font-bold text-gray-900 mb-4">Корзина пуста</h2>
+            <p className="text-gray-600 mb-8">Добавьте товары из каталога</p>
+            <Link to="/catalog" className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg">
+              Перейти в каталог
+            </Link>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="min-h-screen bg-gray-50 pt-20">
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="flex items-center justify-between mb-8">
+          <h1 className="text-3xl font-bold text-gray-900">Корзина</h1>
+          <button
+            onClick={clearCart}
+            className="text-red-600 hover:text-red-800 transition-colors"
+          >
+            Очистить корзину
+          </button>
+        </div>
+
+        <div className="bg-white rounded-lg shadow-md overflow-hidden">
+          {items.map(item => (
+            <div key={item.id} className="flex items-center p-6 border-b border-gray-200 last:border-b-0">
+              <img
+                src={item.image}
+                alt={item.name}
+                className="w-20 h-20 object-cover rounded-lg mr-4"
+              />
+              <div className="flex-1">
+                <h3 className="text-lg font-semibold text-gray-900">{item.name}</h3>
+                <p className="text-gray-600">{item.description}</p>
+                <p className="text-blue-600 font-bold">{item.price.toLocaleString()} ₽</p>
+              </div>
+              <div className="flex items-center space-x-4">
+                <div className="flex items-center space-x-2">
+                  <button
+                    onClick={() => updateQuantity(item.id, item.quantity - 1)}
+                    className="w-8 h-8 bg-gray-200 rounded-full flex items-center justify-center hover:bg-gray-300"
+                  >
+                    -
+                  </button>
+                  <span className="w-8 text-center">{item.quantity}</span>
+                  <button
+                    onClick={() => updateQuantity(item.id, item.quantity + 1)}
+                    className="w-8 h-8 bg-gray-200 rounded-full flex items-center justify-center hover:bg-gray-300"
+                  >
+                    +
+                  </button>
+                </div>
+                <button
+                  onClick={() => removeFromCart(item.id)}
+                  className="text-red-600 hover:text-red-800 transition-colors"
+                >
+                  🗑️
+                </button>
+              </div>
+            </div>
+          ))}
+          
+          <div className="p-6 bg-gray-50">
+            <div className="flex justify-between items-center mb-4">
+              <span className="text-xl font-semibold">Итого:</span>
+              <span className="text-2xl font-bold text-blue-600">{getTotalPrice().toLocaleString()} ₽</span>
+            </div>
+            <Link
+              to="/checkout"
+              className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-lg text-center block transition-colors"
+            >
+              Оформить заказ
+            </Link>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// Checkout Component with QR Code Payment
+export const Checkout = () => {
+  const { items, getTotalPrice, clearCart } = useCart();
+  const [orderComplete, setOrderComplete] = useState(false);
+  const [customerInfo, setCustomerInfo] = useState({
+    name: '',
+    email: '',
+    phone: ''
+  });
+
+  // Generate QR code data for payment
+  const generateQRData = () => {
+    const total = getTotalPrice();
+    return `PAY:${total}:SoftCraft:ORDER-${Date.now()}`;
+  };
+
+  const handleSubmitOrder = (e) => {
+    e.preventDefault();
+    // Simulate order processing
+    setTimeout(() => {
+      setOrderComplete(true);
+      clearCart();
+    }, 2000);
+  };
+
+  if (orderComplete) {
+    return (
+      <div className="min-h-screen bg-gray-50 pt-20">
+        <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          <div className="bg-white rounded-lg shadow-md p-8 text-center">
+            <div className="text-6xl mb-4">✅</div>
+            <h2 className="text-2xl font-bold text-gray-900 mb-4">Заказ оформлен!</h2>
+            <p className="text-gray-600 mb-8">Спасибо за покупку! Мы свяжемся с вами в ближайшее время.</p>
+            <Link to="/catalog" className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg">
+              Продолжить покупки
+            </Link>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="min-h-screen bg-gray-50 pt-20">
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <h1 className="text-3xl font-bold text-gray-900 mb-8">Оформление заказа</h1>
+        
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          {/* Order Form */}
+          <div className="bg-white rounded-lg shadow-md p-6">
+            <h2 className="text-xl font-bold text-gray-900 mb-6">Контактная информация</h2>
+            <form onSubmit={handleSubmitOrder} className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Имя</label>
+                <input
+                  type="text"
+                  required
+                  value={customerInfo.name}
+                  onChange={(e) => setCustomerInfo({...customerInfo, name: e.target.value})}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
+                <input
+                  type="email"
+                  required
+                  value={customerInfo.email}
+                  onChange={(e) => setCustomerInfo({...customerInfo, email: e.target.value})}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Телефон</label>
+                <input
+                  type="tel"
+                  required
+                  value={customerInfo.phone}
+                  onChange={(e) => setCustomerInfo({...customerInfo, phone: e.target.value})}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"
+                />
+              </div>
+              
+              <div className="mt-8">
+                <h3 className="text-lg font-semibold text-gray-900 mb-4">Оплата по QR-коду</h3>
+                <div className="bg-gray-100 p-6 rounded-lg text-center">
+                  <div className="w-32 h-32 bg-white mx-auto mb-4 flex items-center justify-center border-2 border-dashed border-gray-300">
+                    <span className="text-xs text-gray-500">QR Code<br/>{generateQRData()}</span>
+                  </div>
+                  <p className="text-sm text-gray-600">Отсканируйте QR-код для оплаты</p>
+                </div>
+              </div>
+              
+              <button
+                type="submit"
+                className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-lg transition-colors"
+              >
+                Подтвердить заказ
+              </button>
+            </form>
+          </div>
+
+          {/* Order Summary */}
+          <div className="bg-white rounded-lg shadow-md p-6">
+            <h2 className="text-xl font-bold text-gray-900 mb-6">Ваш заказ</h2>
+            <div className="space-y-4">
+              {items.map(item => (
+                <div key={item.id} className="flex justify-between items-center">
+                  <div>
+                    <h4 className="font-medium">{item.name}</h4>
+                    <p className="text-sm text-gray-600">Количество: {item.quantity}</p>
+                  </div>
+                  <span className="font-semibold">{(item.price * item.quantity).toLocaleString()} ₽</span>
+                </div>
+              ))}
+              <div className="border-t border-gray-200 pt-4">
+                <div className="flex justify-between items-center text-xl font-bold">
+                  <span>Итого:</span>
+                  <span className="text-blue-600">{getTotalPrice().toLocaleString()} ₽</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
