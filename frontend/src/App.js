@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import "./App.css";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { Header, Hero, Services, Portfolio, Testimonials, Contact, Footer, Catalog, Cart, Checkout } from "./components";
+import { Header, Hero, Services, Portfolio, Testimonials, Contact, Footer, Catalog, Cart, Checkout, ProductPage } from "./components";
 import { CartProvider } from "./CartContext";
 
 function App() {
@@ -22,6 +22,7 @@ function App() {
               </div>
             } />
             <Route path="/catalog" element={<Catalog />} />
+            <Route path="/product/:id" element={<ProductPage />} />
             <Route path="/cart" element={<Cart />} />
             <Route path="/checkout" element={<Checkout />} />
           </Routes>
