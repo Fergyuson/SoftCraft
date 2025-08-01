@@ -1,31 +1,53 @@
 // Header Component
 export const Header = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const { getTotalItems } = useCart();
   
   return (
     <header className="fixed w-full top-0 z-50 bg-white/95 backdrop-blur-sm border-b border-gray-200">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center py-4">
           <div className="flex items-center">
-            <div className="text-2xl font-bold text-blue-600">
+            <Link to="/" className="text-2xl font-bold text-blue-600">
               SoftCraft
-            </div>
+            </Link>
           </div>
           
           <nav className="hidden md:flex space-x-8">
-            <a href="#home" className="text-gray-700 hover:text-blue-600 transition-colors">Главная</a>
+            <Link to="/" className="text-gray-700 hover:text-blue-600 transition-colors">Главная</Link>
+            <Link to="/catalog" className="text-gray-700 hover:text-blue-600 transition-colors">Каталог</Link>
             <a href="#services" className="text-gray-700 hover:text-blue-600 transition-colors">Услуги</a>
             <a href="#portfolio" className="text-gray-700 hover:text-blue-600 transition-colors">Портфолио</a>
             <a href="#contact" className="text-gray-700 hover:text-blue-600 transition-colors">Контакты</a>
           </nav>
           
-          <div className="hidden md:block">
+          <div className="hidden md:flex items-center space-x-4">
+            <Link to="/cart" className="relative">
+              <div className="w-10 h-10 bg-gray-100 rounded-lg flex items-center justify-center hover:bg-gray-200 transition-colors">
+                🛒
+                {getTotalItems() > 0 && (
+                  <span className="absolute -top-2 -right-2 bg-blue-600 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
+                    {getTotalItems()}
+                  </span>
+                )}
+              </div>
+            </Link>
             <button className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors">
               Связаться
             </button>
           </div>
           
-          <div className="md:hidden">
+          <div className="md:hidden flex items-center space-x-2">
+            <Link to="/cart" className="relative">
+              <div className="w-10 h-10 bg-gray-100 rounded-lg flex items-center justify-center">
+                🛒
+                {getTotalItems() > 0 && (
+                  <span className="absolute -top-2 -right-2 bg-blue-600 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
+                    {getTotalItems()}
+                  </span>
+                )}
+              </div>
+            </Link>
             <button onClick={() => setIsOpen(!isOpen)}>
               <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
@@ -37,7 +59,8 @@ export const Header = () => {
         {isOpen && (
           <div className="md:hidden">
             <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3 bg-white border-t">
-              <a href="#home" className="block px-3 py-2 text-gray-700 hover:text-blue-600">Главная</a>
+              <Link to="/" className="block px-3 py-2 text-gray-700 hover:text-blue-600">Главная</Link>
+              <Link to="/catalog" className="block px-3 py-2 text-gray-700 hover:text-blue-600">Каталог</Link>
               <a href="#services" className="block px-3 py-2 text-gray-700 hover:text-blue-600">Услуги</a>
               <a href="#portfolio" className="block px-3 py-2 text-gray-700 hover:text-blue-600">Портфолио</a>
               <a href="#contact" className="block px-3 py-2 text-gray-700 hover:text-blue-600">Контакты</a>
