@@ -137,25 +137,29 @@ export const Services = () => {
       icon: "🌐",
       title: "Веб-разработка",
       description: "Создание современных веб-приложений с использованием React, Node.js и других передовых технологий",
-      image: "https://images.unsplash.com/photo-1607799279861-4dd421887fb3?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2NzR8MHwxfHNlYXJjaHwyfHx3ZWIlMjBkZXZlbG9wbWVudHxlbnwwfHx8Ymx1ZXwxNzU0MDM3MDgzfDA&ixlib=rb-4.1.0&q=85"
+      image: "https://images.unsplash.com/photo-1607799279861-4dd421887fb3?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2NzR8MHwxfHNlYXJjaHwyfHx3ZWIlMjBkZXZlbG9wbWVudHxlbnwwfHx8Ymx1ZXwxNzU0MDM3MDgzfDA&ixlib=rb-4.1.0&q=85",
+      category: "web"
     },
     {
       icon: "📱",
       title: "Мобильные приложения",
       description: "Разработка нативных и кроссплатформенных мобильных приложений для iOS и Android",
-      image: "https://images.unsplash.com/photo-1593720219128-218edc93bdc0?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2NzR8MHwxfHNlYXJjaHwzfHx3ZWIlMjBkZXZlbG9wbWVudHxlbnwwfHx8Ymx1ZXwxNzU0MDM3MDgzfDA&ixlib=rb-4.1.0&q=85"
+      image: "https://images.unsplash.com/photo-1593720219128-218edc93bdc0?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2NzR8MHwxfHNlYXJjaHwzfHx3ZWIlMjBkZXZlbG9wbWVudHxlbnwwfHx8Ymx1ZXwxNzU0MDM3MDgzfDA&ixlib=rb-4.1.0&q=85",
+      category: "mobile"
     },
     {
       icon: "🎨",
       title: "UI/UX Дизайн",
       description: "Создание интуитивно понятных и привлекательных пользовательских интерфейсов",
-      image: "https://images.unsplash.com/photo-1488590528505-98d2b5aba04b?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2NzR8MHwxfHNlYXJjaHw0fHx3ZWIlMjBkZXZlbG9wbWVudHxlbnwwfHx8Ymx1ZXwxNzU0MDM3MDgzfDA&ixlib=rb-4.1.0&q=85"
+      image: "https://images.unsplash.com/photo-1488590528505-98d2b5aba04b?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2NzR8MHwxfHNlYXJjaHw0fHx3ZWIlMjBkZXZlbG9wbWVudHxlbnwwfHx8Ymx1ZXwxNzU0MDM3MDgzfDA&ixlib=rb-4.1.0&q=85",
+      category: "design"
     },
     {
       icon: "☁️",
       title: "Облачные решения",
       description: "Развертывание и масштабирование приложений в облачных инфраструктурах",
-      image: "https://images.unsplash.com/photo-1591439657848-9f4b9ce436b9?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2Nzd8MHwxfHNlYXJjaHwxfHxzb2Z0d2FyZSUyMHRlYW18ZW58MHx8fGJsdWV8MTc1NDAzNzA4OXww&ixlib=rb-4.1.0&q=85"
+      image: "https://images.unsplash.com/photo-1591439657848-9f4b9ce436b9?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2Nzd8MHwxfHNlYXJjaHwxfHxzb2Z0d2FyZSUyMHRlYW18ZW58MHx8fGJsdWV8MTc1NDAzNzA4OXww&ixlib=rb-4.1.0&q=85",
+      category: "cloud"
     }
   ];
 
@@ -184,7 +188,13 @@ export const Services = () => {
               <div className="p-6">
                 <div className="text-4xl mb-4">{service.icon}</div>
                 <h3 className="text-xl font-bold text-gray-900 mb-3">{service.title}</h3>
-                <p className="text-gray-600">{service.description}</p>
+                <p className="text-gray-600 mb-4">{service.description}</p>
+                <Link 
+                  to={`/catalog?category=${service.category}`}
+                  className="inline-block bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-colors text-center w-full"
+                >
+                  Посмотреть товары
+                </Link>
               </div>
             </div>
           ))}
