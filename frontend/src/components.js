@@ -475,7 +475,9 @@ export const Footer = () => {
   );
 };
 
-// Mock products data (20 items)
+import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
+import { useCart } from "./CartContext";
 const products = [
   // Web Development (5 items)
   { id: 1, name: "React Pro Toolkit", price: 4999, category: "web", image: "https://images.unsplash.com/photo-1648737966636-2fc3a5fffc8a?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2NzB8MXwxfHNlYXJjaHwxfHx0ZWNobm9sb2d5fGVufDB8fHxibHVlfDE3NTQwMTk2NTV8MA&ixlib=rb-4.1.0&q=85", description: "Профессиональный набор инструментов для React разработки" },
